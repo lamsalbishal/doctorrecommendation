@@ -56,15 +56,13 @@ export default class Home extends Component {
 
       
     //calling the search function 
-    searchBox = () =>{
-      console.log('search box area');
-    }
+    
     
 
     //flatlist function for the renderView
     _renderItem = ({item}) => (
       <View style={styles.renderContainer}>
-            <StatusBar hidden/>
+           
             {/* review for doctor for people in list */}
             <View style={styles.reviewStyle}>
                 <Text style={styles.reviewText}>Review for</Text>
@@ -91,13 +89,13 @@ export default class Home extends Component {
                 {/* close the doctor name image */}
                
                 {/* style for the review */}
-                <Text style={styles.peopleReview}>{item.feedback}</Text>
+                <Text  style={styles.peopleReview}>{item.feedback}</Text>
                 {/* close for the review  */}
                 
                 {/* peopleDetail view  */}
                 <View style={styles.peopleDetail}>
-                    <Text style={styles.peopleName}>{item.people}</Text>
-                    <Text>{item.Date}</Text>
+                    <Text  style={styles.peopleName}>{item.people}</Text>
+                    <Text >{item.Date}</Text>
                 </View>
                 {/* close for the peopleDetail View */}
                
@@ -109,7 +107,9 @@ export default class Home extends Component {
     render() {
         return (
             <View style={styles.container}>
-    
+                <View style={styles.navigationHeader}>
+                  <Text style={{fontSize:20,fontWeight:'bold'}}>Doctor Recommendation</Text>
+                </View>
                 {/* using the flatlist */}
                 <FlatList
                     data={feedbackdate}
@@ -129,6 +129,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#E8EAEE',
   },
 
+  //navigation header 
+  navigationHeader: {
+    padding:15,
+    backgroundColor:'#fff',
+    shadowColor: "#000000",
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    shadowOffset: {
+      height: 1,
+      width: 1
+    }
+   },
+  
  
 
   //Start for Review

@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
-import PhotoGrid from '../Home/home';
+import Home from '../Home/home';
+import Search from '../Search/search';
+import FeedBack from '../FeedBack/feedback';
+
+
 import Entypo from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -11,50 +15,53 @@ const search = <Icon name="search" size={20} color="#f12711"/>
 const plus = <Entypo name="plus" size={20} color="#f12711"/>;
 const ios_person = <Ionicons name="ios-person" size={20} color="#f12711"/>;
 
-class Home extends React.Component {
-    static navigationOptions = {
-        tabBarIcon: home,
-      };
-    render() {
-        return <PhotoGrid id="home" />;
-    }
+class HomePage extends React.Component {
+  
+   static navigationOptions = ({
+      tabBarIcon: home,
+      title: 'Home',
+    });
+  render() {
+      return <Home id="home" />;
+  }
 }
 
-class Search extends React.Component {
+class SearchPage extends React.Component {
     static navigationOptions = {
         tabBarIcon: search,
       };
 
     render() {
-        return <PhotoGrid id="search" />;
+        return <Search id="search" />;
     }
 }
 
-class Add extends React.Component {
+class FeedBackPage extends React.Component {
     static navigationOptions = {
         tabBarIcon: plus,
     };
     render() {
-        return <PhotoGrid id="add" />;
+        return <FeedBack id="Feedback" />;
     }
 }
 
-class Profile extends React.Component {
+class ProfilePage extends React.Component {
 
 static navigationOptions = {
     tabBarIcon: ios_person,
     };
     render() {
-        return <PhotoGrid id="profile" />;
+        return <Home id="profile" />;
     }
 }
 
 export default createMaterialBottomTabNavigator(
+    
   {
-    Home,
-    Search,
-    Add,
-    Profile,
+    HomePage,
+    SearchPage,
+    FeedBackPage,
+    ProfilePage,
   },
   {
     shifting: false,

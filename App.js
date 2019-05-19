@@ -13,7 +13,10 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import Home from './src/Home/home';
 import BottomNavigation from './src/BottomNaviagation/bottomNavigation';
 import DoctorList from './src/FeedBack/doctor_list';
-import FeedBack from './src/FeedBack/feedback'
+import FeedBack from './src/FeedBack/feedback';
+import Login from './src/Login/login_form';
+import SignUp from './src/Signup/signup';
+import SearchDetail from './src/Search/search_detail';
 
 
 const MainNavigator = createStackNavigator(
@@ -22,7 +25,7 @@ const MainNavigator = createStackNavigator(
       screen: Home,   
     },
 
-    BottomNavigation : {
+    BottomNavigation: {
       screen:BottomNavigation,
       navigationOptions: ({navigation}) => ({
         header:null
@@ -33,7 +36,22 @@ const MainNavigator = createStackNavigator(
       screen:FeedBack,
     },
 
-    Search:DoctorList,
+    DoctorList:{
+        screen:  DoctorList,
+    },
+
+    SearchDetail:{
+      screen:SearchDetail
+    },
+    
+    Login: {
+      screen:Login
+    },
+
+    Register:{
+      screen:SignUp
+    }
+   
 
   },{
     initialRouteName: 'BottomNavigation',

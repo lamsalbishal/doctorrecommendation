@@ -10,32 +10,33 @@ import React, {Component} from 'react';
 import { StyleSheet, Text, StatusBar,View,TextInput,Image} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 const star = <Icon name="star" size={20} color="#f12711"/>;
 
-feedbackdate = [
+homeData = [
     {
         doctor:'Dr Ramu Lamsal',
         people:'Manoj Phuyal',
-        Date:"Friday, May 2019",
+        Date:'Friday, May 2019',
         feedback:'you need to recompile your project after adding new fonts, also ensure that they also appear under Copy Bundle Resources in Build Phases.'
     },
     
     {
         doctor:'Dr Ramu Lamsal',
         people:'Sandip Paudel',
-        Date:"Friday, May 2019",
+        Date:'Friday, May 2019',
         feedback:'you need to recompile your project after adding new fonts, also ensure that they also appear under Copy Bundle Resources in Build Phases.'
     },
     {
         doctor:'Dr Ramu Lamsal',
         people:'Sagar Khanal',
-        Date:"Friday, May 2019",
+        Date:'Friday, May 2019',
         feedback:'you need to recompile your project after adding new fonts, also ensure that they also appear under Copy Bundle Resources in Build Phases.'
     },
     {
         doctor:'Dr Ramu Lamsal',
         people:'Bishal Lamsal',
-        Date:"Friday, May 2019",
+        Date:'Friday, May 2019',
         feedback:'you need to recompile your project after adding new fonts, also ensure that they also appear under Copy Bundle Resources in Build Phases.'
     },
 ]
@@ -62,7 +63,6 @@ export default class Home extends Component {
     //flatlist function for the renderView
     _renderItem = ({item}) => (
       <View style={styles.renderContainer}>
-           
             {/* review for doctor for people in list */}
             <View style={styles.reviewStyle}>
                 <Text style={styles.reviewText}>Review for</Text>
@@ -112,7 +112,7 @@ export default class Home extends Component {
                 </View>
                 {/* using the flatlist */}
                 <FlatList
-                    data={feedbackdate}
+                    data={homeData}
                     renderItem={this._renderItem}
                 />
                 {/* close the flatlist */}

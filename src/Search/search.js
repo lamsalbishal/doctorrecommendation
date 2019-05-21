@@ -67,11 +67,17 @@ export default class Search extends Component {
             twoCheck:false,
             threeCheck:false,
             fourCheck:false,
+            doctorDetailList:''
         }
     }
 
     setModalVisible(visible) {
         this.setState({modalVisible: visible});
+    }
+
+    componentDidMount(props){
+       super(props);
+       this.makeRemoteRequest()
     }
     
     oneCheckFun = () => {
@@ -144,13 +150,36 @@ export default class Search extends Component {
             })
         } 
     }
+
+
+    //fetch the api 
+    makeRemoteRequest = () => {
+        fetch("http://manojphuyal259-001-site1.gtempurl.com/api/GetDoctor")
+            .then((response) => response.json())
+            .then((responseJson) => {
+            
+            this.setState({
+                doctorDetailList:responseJson
+            })
+            console.log('get fetch data', responseJson)
+            
+            })
+            .catch((error) => {
+            this.setState({
+                isLoading:true
+            })
+            
+            ToastAndroid.show(error.toString(), ToastAndroid.SHORT);
+            });
+                
+    }
     
 
     ShowModal = () => {
         this.setModalVisible(!this.state.modalVisible);
     }
-    searchBox(text,type){
-
+    searchBox(text){
+     console.log(text)
     }
 
     _renderItem = ({item}) =>(
@@ -169,12 +198,12 @@ export default class Search extends Component {
 
                 <View style={{paddingLeft:20}}>
                     <Text style={{color:'blue',fontSize:20,fontWeight:'bold'}}>               
-                        {item.doctor}
+                        {item.Doctor_Name}
                     </Text>
                     <View style={{flexDirection:'row'}}>
-                        <Text>Age {item.age}</Text>
+                        <Text>Age {item.Doctor_Age}</Text>
                         <Text> | </Text>
-                        <Text>{item.specialist}</Text>
+                        <Text>{item.Doctor_Specialty}</Text>
                     </View>
                     <View>
                         <Text>1 Review</Text>
@@ -281,6 +310,7 @@ export default class Search extends Component {
                     searchable={{
                     autoFocus: true,
                     placeholder: 'Search',
+                    onChangeText: text => this.searchBox(text)
                     }}
                     onLeftElementPress={this.ShowModal}
                     onRightElementPress={ (label) => { console.log(label) }}
@@ -290,7 +320,7 @@ export default class Search extends Component {
                 <FlatList
                     navigation = {this.props.navigation}
                     extraData= {this.state}
-                    data={searchdata}
+                    data={this.state.doctorDetailList}
                     renderItem={this._renderItem}
                 />
                 {/* close the flatlist */}

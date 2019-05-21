@@ -19,6 +19,28 @@ export default class Feedback extends Component {
     static navigationOptions={
         header:null
     }
+
+    onShare = async () => {
+        try {
+          const result = await Share.share({
+            message:
+              'React Native | A framework for building native apps using React',
+          });
+    
+          if (result.action === Share.sharedAction) {
+            if (result.activityType) {
+              // shared with activity type of result.activityType
+            } else {
+              // shared
+            }
+          } else if (result.action === Share.dismissedAction) {
+            // dismissed
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+    };
+    
  
 
     header(){
@@ -65,11 +87,13 @@ export default class Feedback extends Component {
                         </View>
                     </TouchableOpacity>
                     
-                    <View style={{alignItems:'center'}}>
-                        <Text>{share}</Text>
-                        <Text>Share your</Text> 
-                        <Text>Doctor</Text>
-                    </View>
+                    <TouchableOpacity onPress={this.onShare()}>
+                        <View style={{alignItems:'center'}}>
+                            <Text>{share}</Text>
+                            <Text>Share your</Text> 
+                            <Text>Doctor</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </View>
         )

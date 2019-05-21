@@ -8,33 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const star = <Icon name="star" size={20} color="#f12711"/>;
 const unfillstar = <Icon name="star-o" size={20} color="#f12711"/>;
 
-feedbackdate = [
-    {   
-        doctor_id:'1',
-        doctor:'Dr Rabin Lamsal',
-        specialist:'Eye ',
-        
-    },
-    
-    {
-        doctor_id:'2',
-        doctor:'Dr Sagar Lamsal',
-        specialist:'Ear Neck',
-       
-    },
-    {   
-        doctor_id:'3',
-        doctor:'Dr Bishal Lamsal',
-        specialist:'Surgery ',
-      
-    },
-    {   
-        doctor_id:'4',
-        doctor:'Dr parbin Lamsal',
-        specialist:'Heart specialist',
-       
-    },
-]
+
 
 export default class DoctorList extends Component {
       
@@ -52,24 +26,163 @@ export default class DoctorList extends Component {
             fiveStar:false,
             count:0,
             feedbackText:'',
+            useremail:'',
             doctorID:'',
             dataSet:'',
             doctorDetailList:'',
+            
+            
            
         }
     }
 
-    SearchFilterFunction = (text) => {
-     
-    }
+   
 
     componentDidMount(){
        this.makeRemoteRequest();
     }
 
+    searchingValue(st) {
+        
+            var search_results = this.state.doctorDetailList.filter( (item) => (item.Doctor_Name.slice(0,st.length).toUpperCase() == st.toUpperCase() ));
+    
+            this.setState({
+                doctorDetailList: search_results
+            });
+        
+       
+       
+       
+    };
+
+    
+
+    static navigationOptions = {
+        header: null
+    };
+
+      setModalVisible(visible,doctorName,doctorID) {
+        this.setState({
+            modalVisible: visible,
+            doctorname:doctorName,
+            doctorID:doctorID
+        });
+      
+        
+      }
+
+      oneStarFun = () => {
+          if(this.state.oneStar === false){
+            this.setState({
+                oneStar: true,
+                count:1
+            })
+            
+
+          }else{
+            this.setState({
+                twoStar:false,
+                threeStar:false,
+                fourStar:false,
+                fiveStar:false,
+                count:1
+            })
+          }
+      
+      }
+
+      sencondStarFun = () => {
+        if(this.state.twoStar === false){
+            this.setState({
+                oneStar: true,
+                twoStar:true,
+                count:2
+            })
+          }else{
+            this.setState({
+                
+                threeStar:false,
+                fourStar:false,
+                fiveStar:false,
+                count:2
+            })
+          }
+       
+      }
+
+      thirdStarFun = () => {
+        if(this.state.threeStar === false){
+            this.setState({
+                oneStar: true,
+                twoStar:true,
+                threeStar:true,
+                count:3
+
+            })
+          }else{
+            this.setState({
+                
+                fourStar:false,
+                fiveStar:false,
+                count:3
+            })
+          }
+      }
+
+      fourStarFun = () => {
+        if(this.state.fourStar === false){
+            this.setState({
+                oneStar: true,
+                twoStar:true,
+                threeStar:true,
+                fourStar:true,
+                count:4
+
+            })
+          }else{
+            this.setState({
+                
+                fiveStar:false,
+                count:4
+            })
+          }
+      }
+
+      fiveStarFun = () => {
+        if(this.state.fiveStar === false){
+            this.setState({
+                oneStar: true,
+                twoStar:true,
+                threeStar:true,
+                fourStar:true,
+                fiveStar:true,
+                count:5
+
+            })
+          }
+      }
+
+    
+    //submit the form
+    feedBackForm(text,type){
+        if(type == 'feedbackText')
+        {  
+        this.setState({
+            feedbackText:text,  
+        })
+    } 
+    if(type == 'useremail'){
+        this.setState({
+            useremail:text
+        })
+    }
+
+    
+    }
+
     //fetch the api 
     makeRemoteRequest = () => {
-        fetch("http://manojphuyal259-001-site1.gtempurl.com/api/Doctorapi/GetDoctor")
+        fetch("http://manojphuyal259-001-site1.gtempurl.com/api/GetDoctor")
             .then((response) => response.json())
             .then((responseJson) => {
             
@@ -88,170 +201,64 @@ export default class DoctorList extends Component {
             });
                 
     }
-
-    static navigationOptions = {
-        title: 'Home',
-        header: (
-        
-          <View >
-                 <Toolbar
-                    leftElement="menu"
-                    centerElement="Doctor Searchable ..."
-                    searchable={{
-                    autoFocus: true,
-                    placeholder: 'Search',
-                    }}
-                  
-                    onRightElementPress={ (label) => { console.log(label) }}
-                />
-          </View>
-       
-       
-        )
-      };
-
-      setModalVisible(visible,doctorName,doctorID) {
-        this.setState({
-            modalVisible: visible,
-            doctorname:doctorName,
-            doctorID:doctorID
-        });
-      
-        
-      }
-
-      oneStarFun = () => {
-          if(this.state.oneStar === false){
-            this.setState({oneStar: true})
-          }else{
-            this.setState({
-                twoStar:false,
-                threeStar:false,
-                fourStar:false,
-                fiveStar:false
-            })
-          }
-      
-      }
-
-      sencondStarFun = () => {
-        if(this.state.twoStar === false){
-            this.setState({
-                oneStar: true,
-                twoStar:true
-            })
-          }else{
-            this.setState({
-                
-                threeStar:false,
-                fourStar:false,
-                fiveStar:false
-            })
-          }
-       
-      }
-
-      thirdStarFun = () => {
-        if(this.state.threeStar === false){
-            this.setState({
-                oneStar: true,
-                twoStar:true,
-                threeStar:true
-
-            })
-          }else{
-            this.setState({
-                
-                fourStar:false,
-                fiveStar:false
-            })
-          }
-      }
-
-      fourStarFun = () => {
-        if(this.state.fourStar === false){
-            this.setState({
-                oneStar: true,
-                twoStar:true,
-                threeStar:true,
-                fourStar:true
-
-            })
-          }else{
-            this.setState({
-                
-                fiveStar:false
-            })
-          }
-      }
-
-      fiveStarFun = () => {
-        if(this.state.fiveStar === false){
-            this.setState({
-                oneStar: true,
-                twoStar:true,
-                threeStar:true,
-                fourStar:true,
-                fiveStar:true
-
-            })
-          }
-      }
-
-    
-    //submit the form
-    feedBackForm(text,type){
-        this.setState({
-            feedbackText:text
-        })
-    
-    }
             
 
-    // feedbackSubmit(){
+    feedbackSubmit(){
       
-    //     let collection = {}
-    //     collection.feedback = this.state.feedbackText
+        let collection = {}
+        collection.feedback = this.state.feedbackText
         
        
-    //     fetch('https://classify-feed.herokuapp.com/'+this.state.feedbackText, {
-    //       method: 'POST', // or 'PUT'
-    //       body: JSON.stringify(collection), // data can be `string` or {object}!
-    //       headers:{
-    //         'Accept': 'appliaction/json',
-    //         'Content-Type': 'application/json'
-    //       }
-    //     }).then(res => res.json())
-    //     .then(
-    //         response => {
-    //           this.setState({
-    //               dataSet:response.data
-    //           })
+        fetch('https://classify-feed.herokuapp.com/'+this.state.feedbackText, {
+          method: 'POST', // or 'PUT'
+          body: JSON.stringify(collection), // data can be `string` or {object}!
+          headers:{
+            'Accept': 'appliaction/json',
+            'Content-Type': 'application/json'
+          }
+        }).then(res => res.json())
+        .then(
+            response => {
+              this.setState({
+                  dataSet:response.data
+              })
+              let feedback_result = this.state.dataSet[0].classification;
+              console.log('feedback result',feedback_result)
+              let x ;
+              if(feedback_result == "Positive")
+              {
+                  x= 1
+                  
+              }else{
+                  x=0
+                 
+              }
+            //   console.log('feedback count ',x);
+            //   ToastAndroid.show('Success full', ToastAndroid.SHORT);
+            this.allDataPOST(x)
               
-    //           console.log('check dataset',this.state.dataSet[0].classification)
-    //           ToastAndroid.show('Success full', ToastAndroid.SHORT);
-              
-    //         }
-    //         // showMe=>false
-    //         ).catch(error => {
+            }
+            // showMe=>false
+            ).catch(error => {
              
-    //          console.log('Login error',error)
+             console.log('Login error',error)
               
-    //         });
-    // }
+            });
+    }
 
 
-    feedbackSubmit(){
+    allDataPOST(x){
         let collection ={}
 
-        collection.Doctor_Classification= "1",
-        collection. Doctor_Comment = "Hahaha", 
-        collection.Doctor_ID="1",
-        collection. User_Email = "Sagar@Khanal.com"
-        collection. Doctor_Point_No= "1",
+        collection.Doctor_Classification= x,
+        collection.Doctor_Comment = this.state.feedbackText, 
+        collection.Doctor_ID=this.state.doctorID,
+        collection. User_Email = this.state.useremail,
+        collection. Doctor_Point_No= this.state.count,
        
+        console.log('feedback collection',collection);
 
-        fetch('http://manojphuyal259-001-site1.gtempurl.com/api/DoctorCommentapi/PostDoctor', {
+        fetch('http://manojphuyal259-001-site1.gtempurl.com/api/PostDoctorComment', {
             method: 'POST', // or 'PUT'
             body: JSON.stringify(collection), // data can be `string` or {object}!
             headers:{
@@ -273,13 +280,31 @@ export default class DoctorList extends Component {
               });
     }
    
+    //search toolbar for doctor search
+    searchToolbar(){
+        return(
+            <View>
+                <Toolbar
+                    leftElement="arrow-back"
+                    centerElement="Doctor Searchable ..."
+                    searchable={{
+                    autoFocus: true,
+                    placeholder: 'Search',
+                    onChangeText: text => {this.searchingValue(text)}
+                    }}
+                
+                />
+            </View>
+        )
+    }
+
 
     //close thr form
 
     _renderItem = ({item}) =>(
         <View>
            <TouchableOpacity  onPress={() => {
-            this.setModalVisible(true,item.doctor,item.id);
+            this.setModalVisible(true,item.Doctor_Name,item.Doctor_ID);
             }}>
 
             <View style={{backgroundColor:'#FFFFFF',padding:10,marginTop:8,flexDirection:'row',alignItems:'center'}}>
@@ -291,11 +316,20 @@ export default class DoctorList extends Component {
                 </View>
                 <View style={{paddingLeft:10}}>
                     <Text>               
-                        {item.doctor} 
+                        {item.Doctor_Name} 
                     </Text>
-                    <Text>
-                        {item.specialist}
-                    </Text>
+
+                   
+                    <View style={{flexDirection:'row'}}>
+                       <Text>{item.Doctor_Specialty}</Text>
+                       <Text> | </Text>
+                       <Text>{item.Doctor_Experience} yrs</Text>
+                    </View>
+                    <View style={{flexDirection:'row'}}>
+                       <Text>{item.Doctor_Sex}</Text>
+                       <Text> | </Text>
+                       <Text>{item.Doctor_Age} yrs</Text>
+                    </View>
                    
                 </View>  
             </View>
@@ -304,13 +338,9 @@ export default class DoctorList extends Component {
         </View>
     );
 
-
-    
-    render() {
-        return (
-            <View style={styles.container}>
-                {/* using the modal  */}
-                <Modal
+   modalFunction(){
+       return(
+            <Modal
                     animationType="slide"
                     transparent={false}
                     visible={this.state.modalVisible}
@@ -370,7 +400,7 @@ export default class DoctorList extends Component {
 
                             <TextInput
                                 style={{height: 50,backgroundColor:'#E8EAEE',marginTop:20}}
-                                onChangeText={(text) => console.log(text)}
+                                onChangeText={(text) => this.feedBackForm(text,'useremail')}
                                 placeholder="email@gmail.com"
                                 value={this.state.text}
                             />
@@ -399,11 +429,23 @@ export default class DoctorList extends Component {
                         </View>
                     </View>
                 </Modal>
+       )
+   }
+
+    
+    render() {
+        return (
+            <View style={styles.container}>
+                {/* using the modal  */}
+                  {this.modalFunction()}
                 
+                {/* //search toolbar  */}
+                {this.searchToolbar()}
+
                 {/* using the flatlist */}
                 <View style={{paddingTop:5}}>
                     <FlatList
-                        data={feedbackdate}
+                        data={this.state.doctorDetailList}
                         renderItem={this._renderItem}
                     />
                 </View>

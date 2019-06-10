@@ -8,7 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 import Home from '../Home/home';
-import Search from '../Search/search';
+import Search from '../Search/serchpage';
 import FeedBack from '../FeedBack/feedback';
 import Login from '../Login/login';
 

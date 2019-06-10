@@ -7,56 +7,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 const cross = <Entypo name="circle-with-cross" size={30} color="#f12711"/>
+
 const star = <Icon name="star" size={20} color="#f12711"/>;
+const unstar = <Icon name="star-o" size={20} color="#000" />;
 
-searchdata = [
-    {
-        doctor:'Dr Rabin Lamsal',
-        age:'35',
-        specialist:'Eye'
-        
-    },
-    
-    {
-        doctor:'Dr Sagar Lamsal',
-        age:'40',
-        specialist:'Eye'
-       
-    },
-    {
-        doctor:'Dr Bishal Lamsal',
-        age:'42',
-        specialist:'Eye'
-      
-    },
-    {
-        doctor:'Dr parbin Lamsal',
-        age:'45',
-        specialist:'Eye',
-       
-    },
 
-    {
-        doctor:'Dr Sagar Lamsal',
-        age:'40',
-        specialist:'Eye'
-       
-    },
-    {
-        doctor:'Dr Bishal Lamsal',
-        age:'42',
-        specialist:'Eye'
-      
-    },
-    {
-        doctor:'Dr parbin Lamsal',
-        age:'45',
-        specialist:'Eye',
-       
-    },
-]
-
-export default class Search extends Component {
+export default class HospitalSearch extends Component {
       
     constructor(props){
         super(props);
@@ -76,24 +32,19 @@ export default class Search extends Component {
     }
 
     componentDidMount(props){
-       super(props);
+     
        this.makeRemoteRequest()
     }
     
     oneCheckFun = () => {
         if(this.state.oneCheck == false) {
            this.setState({
-               oneCheck:true,
-               twoCheck:false,
-               threeCheck:false,
-               fourCheck:false
+               oneCheck:true,         
            })
 
         }else {
            this.setState({
-               twoCheck:false,
-               threeCheck:false,
-               fourCheck:false
+              oneCheck:false
            })
         }
     }
@@ -101,56 +52,17 @@ export default class Search extends Component {
     twoCheckFun = () => {
         if(this.state.twoCheck == false){
            this.setState({
-                twoCheck:true,
-                oneCheck:false,
-                threeCheck:false,
-                fourCheck:false
+                twoCheck:true,    
                
            })
         }else{
             this.setState({
-                oneCheck:false,
-                threeCheck:false,
-                fourCheck:false
+               twoCheck:false
             })
         }
     }
 
-    threeCheckFun = () => {
-        if(this.state.threeCheck == false){
-          this.setState({
-              threeCheck:true,
-              oneCheck:false,
-              twoCheck:false,
-              fourCheck:false
-          })
-        }else {
-           this.setState({
-              oneCheck:false,
-              twoCheck:false,
-              fourCheck:false
-           })
-        }
-    }
-
-    fourCheckFun = () => {
-        if(this.state.fourCheck == false){
-            this.setState({
-                fourCheck:true,
-                threeCheck:false,
-                oneCheck:false,
-                twoCheck:false,
-              
-        })
-        }else {
-            this.setState({
-            oneCheck:false,
-            twoCheck:false,
-            threeCheck:false,
-            })
-        } 
-    }
-
+   
 
     //fetch the api 
     makeRemoteRequest = () => {
@@ -183,11 +95,13 @@ export default class Search extends Component {
     }
 
     _renderItem = ({item}) =>(
+       
+      
         <View>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('SearchDetail')}>
 
            
-            <View style={{flexDirection:'row',marginTop:10,borderBottomWidth:2,borderBottomColor:'#846602',padding:10,backgroundColor:'#dbd9d2'}}>
+            <View style={{flexDirection:'row',marginTop:10,borderBottomWidth:2,borderBottomColor:'#846602',padding:10,backgroundColor:'#F2F2F2'}}>
 
                 <View>
                     <Image
@@ -197,24 +111,86 @@ export default class Search extends Component {
                 </View>
 
                 <View style={{paddingLeft:20}}>
-                    <Text style={{color:'blue',fontSize:20,fontWeight:'bold'}}>               
+                    <Text style={{color:'#000',fontSize:16,fontWeight:'bold'}}>               
                         {item.Doctor_Name}
                     </Text>
                     <View style={{flexDirection:'row'}}>
                         <Text>Age {item.Doctor_Age}</Text>
                         <Text> | </Text>
                         <Text>{item.Doctor_Specialty}</Text>
+                       
                     </View>
                     <View>
-                        <Text>1 Review</Text>
+                       
+                        <Text>{item.Doctor_Review} Review</Text>
+
                     </View>
 
                     <View style={styles.startPosotion}>
-                        <Text style={styles.starIcon}>{star}</Text>
-                        <Text style={styles.starIcon}>{star}</Text>
-                        <Text style={styles.starIcon}>{star}</Text>
-                        <Text style={styles.starIcon}>{star}</Text>
-                        <Text style={styles.starIcon}>{star}</Text>
+                         
+                        {Math.round(item.Doctor_Total_Star/item.Doctor_Review) == 5?
+                         <View style={{flexDirection:"row"}}>
+                          <Text style={styles.starIcon}>{star}</Text>
+                          <Text style={styles.starIcon}>{star}</Text>
+                          <Text style={styles.starIcon}>{star}</Text>
+                          <Text style={styles.starIcon}>{star}</Text>
+                          <Text style={styles.starIcon}>{star}</Text>
+                          </View>
+                        :null }
+
+
+                        {Math.round(item.Doctor_Total_Star/item.Doctor_Review) == 4?
+                          <View style={{flexDirection:"row"}}>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                          </View>
+                        :null }
+
+                        {Math.round(item.Doctor_Total_Star/item.Doctor_Review) == 3?
+                          <View style={{flexDirection:"row"}}>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                          </View>
+                        :null
+                       }
+
+                        {Math.round(item.Doctor_Total_Star/item.Doctor_Review) == 2?
+                          <View style={{flexDirection:"row"}}>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                          </View>
+                        :null }
+
+                        {Math.round(item.Doctor_Total_Star/item.Doctor_Review) == 1?
+                          <View style={{flexDirection:"row"}}>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                          </View>
+                        :null  }
+
+                        {Math.round(item.Doctor_Total_Star/item.Doctor_Review) == 0?
+                         <View style={{flexDirection:"row"}}>
+                          <Text style={styles.starIcon}>{unstar}</Text>
+                          <Text style={styles.starIcon}>{unstar}</Text>
+                          <Text style={styles.starIcon}>{unstar}</Text>
+                          <Text style={styles.starIcon}>{unstar}</Text>
+                          <Text style={styles.starIcon}>{unstar}</Text>
+                          </View>
+                          :null }
+                         
+                      
                     </View>
                     
                 </View>
@@ -225,6 +201,7 @@ export default class Search extends Component {
             </TouchableOpacity>
            
         </View>
+        
     );
     
     render() {
@@ -268,23 +245,7 @@ export default class Search extends Component {
                             </View>
                            
 
-                            <Text style={{padding:6}}>GENDER</Text>
-                            <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                            <CheckBox 
-                                textStyle={{fontSize:12,color:'gray'}}
-                                title='Male'
-                                checked={this.state.threeCheck}
-                                onPress={this.threeCheckFun}
-                            />
-
-                            <CheckBox 
-                                textStyle={{fontSize:12,color:'gray'}}
-                                title='Female'
-                                checked={this.state.fourCheck}
-                                onPress={this.fourCheckFun}
-                            />
-                             
-                            </View>
+                           
                             <View style={{width:'100%',alignItems:'center'}}>
                                 <View style={{flexDirection:'row',padding:10}}>
                                     <TouchableOpacity>
@@ -306,7 +267,7 @@ export default class Search extends Component {
 
                 <Toolbar
                     leftElement="menu"
-                    centerElement="Doctor Searchable ..."
+                    centerElement="Hospital Searchable ..."
                     searchable={{
                     autoFocus: true,
                     placeholder: 'Search',

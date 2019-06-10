@@ -30,7 +30,8 @@ export default class DoctorList extends Component {
             doctorID:'',
             dataSet:'',
             doctorDetailList:'',
-            
+            doctorDetailListView:'',
+            errorText:false
             
            
         }
@@ -42,15 +43,21 @@ export default class DoctorList extends Component {
        this.makeRemoteRequest();
     }
 
+    onPressBackButton = () => {
+        this.props.navigation.goBack();
+    }
+
+
     searchingValue(st) {
         
-            var search_results = this.state.doctorDetailList.filter( (item) => (item.Doctor_Name.slice(0,st.length).toUpperCase() == st.toUpperCase() ));
-    
-            this.setState({
-                doctorDetailList: search_results
-            });
-        
-       
+            var search_results = this.state.doctorDetailListView.filter( (item) => (item.Doctor_Name.slice(0,st.length).toUpperCase() == st.toUpperCase() ));
+            console.log("doctorlistSerch",this.state.doctorDetailListView);
+            
+                this.setState({
+                    doctorDetailList: search_results 
+                });
+           
+
        
        
     };
@@ -187,9 +194,11 @@ export default class DoctorList extends Component {
             .then((responseJson) => {
             
             this.setState({
-                doctorDetailList:responseJson
+                doctorDetailList:responseJson,
+                doctorDetailListView:responseJson
+
             })
-            console.log('get fetch data', responseJson)
+          
             
             })
             .catch((error) => {
@@ -205,56 +214,68 @@ export default class DoctorList extends Component {
 
     feedbackSubmit(){
       
-        let collection = {}
-        collection.feedback = this.state.feedbackText
-        
-       
-        fetch('https://classify-feed.herokuapp.com/'+this.state.feedbackText, {
-          method: 'POST', // or 'PUT'
-          body: JSON.stringify(collection), // data can be `string` or {object}!
-          headers:{
-            'Accept': 'appliaction/json',
-            'Content-Type': 'application/json'
-          }
-        }).then(res => res.json())
-        .then(
-            response => {
-              this.setState({
-                  dataSet:response.data
-              })
-              let feedback_result = this.state.dataSet[0].classification;
-              console.log('feedback result',feedback_result)
-              let x ;
-              if(feedback_result == "Positive")
-              {
-                  x= 1
-                  
-              }else{
-                  x=0
-                 
+        console.log("countdata",this.state.count)
+        if(this.state.feedbackText.length > 0){
+            let collection = {}
+            collection.feedback = this.state.feedbackText
+            
+           
+            fetch('https://classify-feed.herokuapp.com/'+this.state.feedbackText, {
+              method: 'POST', // or 'PUT'
+              body: JSON.stringify(collection), // data can be `string` or {object}!
+              headers:{
+                'Accept': 'appliaction/json',
+                'Content-Type': 'application/json'
               }
-            //   console.log('feedback count ',x);
-            //   ToastAndroid.show('Success full', ToastAndroid.SHORT);
-            this.allDataPOST(x)
-              
-            }
-            // showMe=>false
-            ).catch(error => {
-             
-             console.log('Login error',error)
-              
-            });
+            }).then(res => res.json())
+            .then(
+                response => {
+                
+                  this.setState({
+                      dataSet:response.data
+                  })
+                  let feedback_result = this.state.dataSet[0].classification;
+                  console.log('feedback result',feedback_result)
+                  let x ;
+                  if(feedback_result == "Positive")
+                  {
+                      x= 1
+                      
+                  }else{
+                      x=0
+                     
+                  }
+                //   console.log('feedback count ',x);
+                //   ToastAndroid.show('Success full', ToastAndroid.SHORT);
+                this.allDataPOST(x)
+                  
+                }
+                // showMe=>false
+                ).catch(error => {
+                 
+                 console.log('Login error',error)
+                  
+                });
+        }else{
+            this.setState({
+                errorText:true
+            })
+            
+        }
+       
     }
 
 
     allDataPOST(x){
+        
         let collection ={}
 
         collection.Doctor_Classification= x,
         collection.Doctor_Comment = this.state.feedbackText, 
         collection.Doctor_ID=this.state.doctorID,
         collection. User_Email = this.state.useremail,
-        collection. Doctor_Point_No= this.state.count,
+        collection. Doctor_Point_No = this.state.count,
+        collection.Doctor_Star = this.state.count,
        
         console.log('feedback collection',collection);
 
@@ -278,6 +299,10 @@ export default class DoctorList extends Component {
                console.log('Login error',error)
                 
               });
+
+        this.setState({
+            modalVisible: !this.state.modalVisible, 
+        })      
     }
    
     //search toolbar for doctor search
@@ -286,6 +311,7 @@ export default class DoctorList extends Component {
             <View>
                 <Toolbar
                     leftElement="arrow-back"
+                    onLeftElementPress={this.onPressBackButton}
                     centerElement="Doctor Searchable ..."
                     searchable={{
                     autoFocus: true,
@@ -302,7 +328,7 @@ export default class DoctorList extends Component {
     //close thr form
 
     _renderItem = ({item}) =>(
-        <View>
+        <View >
            <TouchableOpacity  onPress={() => {
             this.setModalVisible(true,item.Doctor_Name,item.Doctor_ID);
             }}>
@@ -389,6 +415,7 @@ export default class DoctorList extends Component {
                             <Text>Tell us more about your visit</Text>
 
                             <TextInput
+                                
                                 style={{backgroundColor:'#E8EAEE',marginTop:20}}
                                 onChangeText={(text) => this.feedBackForm(text,'feedbackText')} 
                                 underlineColorAndroid="transparent"
@@ -399,6 +426,7 @@ export default class DoctorList extends Component {
                             />
 
                             <TextInput
+                                keyboardType="email-address"
                                 style={{height: 50,backgroundColor:'#E8EAEE',marginTop:20}}
                                 onChangeText={(text) => this.feedBackForm(text,'useremail')}
                                 placeholder="email@gmail.com"
@@ -415,6 +443,7 @@ export default class DoctorList extends Component {
                                 />
                             </View>
 
+
                             <View style={{paddingTop:10}}>
 
                                 <TouchableOpacity onPress={() => {this.feedbackSubmit()}}>
@@ -424,6 +453,11 @@ export default class DoctorList extends Component {
                                 </TouchableOpacity>
 
                             </View>
+
+                            {this.state.errorText?
+                            <Text style={{paddingTop:10,color:'red'}}>Please fill all field</Text>
+                            :null
+                            }
 
 
                         </View>
@@ -443,10 +477,11 @@ export default class DoctorList extends Component {
                 {this.searchToolbar()}
 
                 {/* using the flatlist */}
-                <View style={{paddingTop:5}}>
+                <View style={{paddingTop:5,paddingBottom:50}}>
                     <FlatList
                         data={this.state.doctorDetailList}
                         renderItem={this._renderItem}
+                        
                     />
                 </View>
                

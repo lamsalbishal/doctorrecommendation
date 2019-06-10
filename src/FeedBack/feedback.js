@@ -37,7 +37,7 @@ export default class Feedback extends Component {
             // dismissed
           }
         } catch (error) {
-          alert(error.message);
+         console.log("error",error.message);
         }
     };
     
@@ -87,7 +87,7 @@ export default class Feedback extends Component {
                         </View>
                     </TouchableOpacity>
                     
-                    <TouchableOpacity onPress={this.onShare()}>
+                    <TouchableOpacity onPress={() => this.onShare()}>
                         <View style={{alignItems:'center'}}>
                             <Text>{share}</Text>
                             <Text>Share your</Text> 

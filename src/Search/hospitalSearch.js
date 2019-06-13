@@ -66,7 +66,7 @@ export default class HospitalSearch extends Component {
 
     //fetch the api 
     makeRemoteRequest = () => {
-        fetch("http://manojphuyal259-001-site1.gtempurl.com/api/GetDoctor")
+        fetch("http://manojphuyal259-001-site1.gtempurl.com/api/GetHospital")
             .then((response) => response.json())
             .then((responseJson) => {
             
@@ -97,108 +97,25 @@ export default class HospitalSearch extends Component {
     _renderItem = ({item}) =>(
        
       
-        <View>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('SearchDetail')}>
-
-           
-            <View style={{flexDirection:'row',marginTop:10,borderBottomWidth:2,borderBottomColor:'#846602',padding:10,backgroundColor:'#F2F2F2'}}>
-
-                <View>
-                    <Image
-                        style={{width:70, height:80}}
-                        source={require('../assets/doctoricon.png')}
-                    />
-                </View>
-
-                <View style={{paddingLeft:20}}>
-                    <Text style={{color:'#000',fontSize:16,fontWeight:'bold'}}>               
-                        {item.Doctor_Name}
-                    </Text>
-                    <View style={{flexDirection:'row'}}>
-                        <Text>Age {item.Doctor_Age}</Text>
-                        <Text> | </Text>
-                        <Text>{item.Doctor_Specialty}</Text>
-                       
-                    </View>
+        <View style={{paddingTop:10}}>
+            
+                <View style={{backgroundColor:"#F6F6F6",flexDirection:'row',padding:10,alignItems:'center',borderBottomWidth:2,borderBottomColor:'#846602'}}>
                     <View>
-                       
-                        <Text>{item.Doctor_Review} Review</Text>
-
+                        <Image
+                            style={{width:70, height:80}}
+                            source={{uri:item.Hospital_Image_URL}}
+                            resizeMode = "cover"
+                        />
                     </View>
-
-                    <View style={styles.startPosotion}>
-                         
-                        {Math.round(item.Doctor_Total_Star/item.Doctor_Review) == 5?
-                         <View style={{flexDirection:"row"}}>
-                          <Text style={styles.starIcon}>{star}</Text>
-                          <Text style={styles.starIcon}>{star}</Text>
-                          <Text style={styles.starIcon}>{star}</Text>
-                          <Text style={styles.starIcon}>{star}</Text>
-                          <Text style={styles.starIcon}>{star}</Text>
-                          </View>
-                        :null }
-
-
-                        {Math.round(item.Doctor_Total_Star/item.Doctor_Review) == 4?
-                          <View style={{flexDirection:"row"}}>
-                            <Text style={styles.starIcon}>{star}</Text>
-                            <Text style={styles.starIcon}>{star}</Text>
-                            <Text style={styles.starIcon}>{star}</Text>
-                            <Text style={styles.starIcon}>{star}</Text>
-                            <Text style={styles.starIcon}>{unstar}</Text>
-                          </View>
-                        :null }
-
-                        {Math.round(item.Doctor_Total_Star/item.Doctor_Review) == 3?
-                          <View style={{flexDirection:"row"}}>
-                            <Text style={styles.starIcon}>{star}</Text>
-                            <Text style={styles.starIcon}>{star}</Text>
-                            <Text style={styles.starIcon}>{star}</Text>
-                            <Text style={styles.starIcon}>{unstar}</Text>
-                            <Text style={styles.starIcon}>{unstar}</Text>
-                          </View>
-                        :null
-                       }
-
-                        {Math.round(item.Doctor_Total_Star/item.Doctor_Review) == 2?
-                          <View style={{flexDirection:"row"}}>
-                            <Text style={styles.starIcon}>{star}</Text>
-                            <Text style={styles.starIcon}>{star}</Text>
-                            <Text style={styles.starIcon}>{unstar}</Text>
-                            <Text style={styles.starIcon}>{unstar}</Text>
-                            <Text style={styles.starIcon}>{unstar}</Text>
-                          </View>
-                        :null }
-
-                        {Math.round(item.Doctor_Total_Star/item.Doctor_Review) == 1?
-                          <View style={{flexDirection:"row"}}>
-                            <Text style={styles.starIcon}>{star}</Text>
-                            <Text style={styles.starIcon}>{unstar}</Text>
-                            <Text style={styles.starIcon}>{unstar}</Text>
-                            <Text style={styles.starIcon}>{unstar}</Text>
-                            <Text style={styles.starIcon}>{unstar}</Text>
-                          </View>
-                        :null  }
-
-                        {Math.round(item.Doctor_Total_Star/item.Doctor_Review) == 0?
-                         <View style={{flexDirection:"row"}}>
-                          <Text style={styles.starIcon}>{unstar}</Text>
-                          <Text style={styles.starIcon}>{unstar}</Text>
-                          <Text style={styles.starIcon}>{unstar}</Text>
-                          <Text style={styles.starIcon}>{unstar}</Text>
-                          <Text style={styles.starIcon}>{unstar}</Text>
-                          </View>
-                          :null }
-                         
-                      
+                    <View style={{paddingLeft:20}}>
+                        <Text style={{fontSize:16,color:'#000'}}>{item.Hospital_Name}</Text>
+                        <Text style={{fontSize:12,color:"gray"}}>{item.Hospital_Address}</Text>
+                        <Text style={{fontSize:12,color:"gray"}}>{item.Hospital_Phone}</Text>
                     </View>
-                    
-                </View>
-
                
-
-            </View>
-            </TouchableOpacity>
+                   
+                </View>
+         
            
         </View>
         

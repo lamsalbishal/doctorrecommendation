@@ -25,6 +25,8 @@ export default class Search extends Component {
             fourCheck:false,
             doctorDetailList:'',
             apiData:'',
+            doctorFilterData:'',
+            gender:''
             
         }
     }
@@ -127,35 +129,41 @@ export default class Search extends Component {
 
     filterData  =() =>{
         
-        const doctorFilter = this.state.apiData;
-
-        if(this.state.oneCheck){
+        this.state.doctorDetailList = this.state.apiData;
+       
+        if(this.state.oneCheck){  
             this.setState({
-                doctorDetailList :  doctorFilter.filter((item) => item.Doctor_Address === "New Road" )  
+                doctorDetailList :  this.state.doctorDetailList.filter((item) => item.Doctor_Address === "New Road" )  
             })
         }
-
-        if(this.state.twoCheck){
-           
-        }
-
+         
         if(this.state.threeCheck){
-             this.setState({
-              doctorDetailList:  doctorFilter.filter((item) => item.Doctor_Sex === "Male" )  
-             })   
-        }
-
-        if(this.state.fourCheck){
-           this.setState({
-               doctorDetailList:doctorFilter.filter((item) => item.Doctor_Sex === "Female" )  
-           })
+            this.state.gender = "Male"
+            this.setState({
               
-           
+            doctorDetailList:  this.state.doctorDetailList.filter((item) => item.Doctor_Sex === "Male" )  
+            })   
         }
+ 
+         if(this.state.fourCheck){
+             this.state.gender = "Female";
+             this.setState({
+                
+                 doctorDetailList:this.state.doctorDetailList.filter((item) => item.Doctor_Sex === "Female" )  
+             })
+        }
+         
+       
 
-      
+        if(this.state.oneCheck && this.state.threeCheck || this.state.fourCheck){
+         
+            this.setState({
+                doctorDetailList:  this.state.doctorDetailList.filter((item) => item.Doctor_Address === "New Road" && item.Doctor_Sex == this.state.gender )  
+                }) 
+        }     
        
         this.setState({
+            
             modalVisible:false
         })
     }
@@ -164,7 +172,22 @@ export default class Search extends Component {
        
       
         <View>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('SearchDetail')}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('SearchDetail',{
+                Name:item.Doctor_Name,
+                Age:item.Doctor_Age,
+                Sex:item.Doctor_Sex,
+                Review:item.Doctor_Review,
+                Star:item.Doctor_Total_Star,
+                Speciality:item.Doctor_Specialty,
+                Education:item.Doctor_Education,
+                Email:item.Doctor_Email,
+                Biography:item.Doctor_Bio,
+                Hospital:item.Hospital_Name,
+                ImageUrl:item.Doctor_Image_URL
+              
+                
+
+            })}>
 
            
             <View style={{flexDirection:'row',marginTop:10,borderBottomWidth:2,borderBottomColor:'#846602',padding:10,backgroundColor:'#F2F2F2'}}>
@@ -172,7 +195,7 @@ export default class Search extends Component {
                 <View>
                     <Image
                         style={{width:70, height:80}}
-                        source={require('../assets/doctoricon.png')}
+                        source={{uri:item.Doctor_Image_URL}}
                     />
                 </View>
 

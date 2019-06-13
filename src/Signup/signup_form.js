@@ -7,7 +7,8 @@ import {
         Text,
         ActivityIndicator,
         ToastAndroid,
-        Alert
+        Alert,
+        AsyncStorage
         } from 'react-native';
 
 
@@ -189,31 +190,34 @@ export default class SignUpForm extends Component{
         collection.phone = this.state.phone,
         
         console.log('collection data',collection);
-    
+     
 
-        fetch('https://dashani.ostapp.com', {
-            method: 'POST', // or 'PUT'
-            body: JSON.stringify(collection), // data can be `string` or {object}!
-            headers:{
-            'Accept': 'appliaction/json',
-            'Content-Type': 'application/json'
-            }
-        }).then(res => res.json())
-        .then(
-            response => {
-                this.setState ({
-                showMe:false
-                })
-                ToastAndroid.show(response.message.toString(), ToastAndroid.SHORT);
-            }
-            // showMe=>false
-        ).catch(error => {
-            this.setState({
-            showMe:false
-            })
-            ToastAndroid.show("Problem in server", ToastAndroid.SHORT);
+        try {
             
-        });
+             AsyncStorage.setItem('register',JSON.stringify(collection));
+             Alert.alert(
+                'Successfully',
+                'Register Successfully',
+                [
+                 
+                  {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                  },
+                  {text: 'OK', onPress: () => this.props.navigation.navigate("Profile")},
+                ],
+                {cancelable: false},
+              );
+            this.setState({
+                showMe:false
+            })
+          } catch (error) {
+            this.setState({
+                showMe:false
+            })
+            console.log("register error",error)
+          }
     }
         
     
@@ -221,14 +225,7 @@ export default class SignUpForm extends Component{
         return (
         
             <View style={styles.container}>
-                {this.state.showMe?
-                    <View>
-                        <ActivityIndicator size="large" />
-                    </View>:
-                    <View>
-                        <Text></Text>
-                    </View>
-                }
+                
 
                 <TextInput 
                     style={[styles.inputBox, !this.state.fullnameValidate?styles.error:null]} 
@@ -306,14 +303,18 @@ export default class SignUpForm extends Component{
                     placeholderTextColor='#000000'
                     ref={(input) => { this.sevenTextInput = input; }}/>
                 
+                {this.state.showMe?
+                    <ActivityIndicator size="large"></ActivityIndicator>:
+                    <TouchableOpacity 
+                        style= {styles.button} 
+                        onPress={() => this.submit()}>
+                            <Text style= {styles.bottomText}>
+                                {this.props.type}
+                            </Text>
+                    </TouchableOpacity>
+                }
 
-                <TouchableOpacity 
-                    style= {styles.button} 
-                    onPress={() => this.submit()}>
-                        <Text style= {styles.bottomText}>
-                            {this.props.type}
-                        </Text>
-                </TouchableOpacity>
+                
             </View>
         );
     }

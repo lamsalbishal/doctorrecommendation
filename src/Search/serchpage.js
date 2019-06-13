@@ -21,6 +21,7 @@ export default class Trending extends Component {
          <ScrollView
          horizontal={true}
          showsHorizontalScrollIndicator={true}
+         pagingEnabled
          >
              <View style={{width:width,height:height}}>
                 <DoctorSearch navigation={this.props.navigation}/>

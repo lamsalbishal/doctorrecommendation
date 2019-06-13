@@ -2,47 +2,137 @@
 import React, { Component } from 'react';
 //import react in our code.
  
-import { StyleSheet, View, Image, TouchableOpacity, Alert,Text } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, Alert,Text,Share } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 const star = <Icon name="star" size={20} color="#f12711"/>;
+const unstar = <Icon name="star-o" size={20} color="#000" />;
+const email = <MaterialIcons name="email" size={20} color="#000"/>
 //import all the components we are going to use.
  
 export default class DoctorDetail extends Component {
   clickHandler = () => {
-    //function to handle click on floating Action Button
-    Alert.alert('Floating Button Clicked');
+    this.props.navigation.navigate("Appointment",{
+     Name: this.props.navigation.getParam('Name'),
+
+    });
   };
    
-  static navigationOptions = {
-    title: 'Doctor name',
+   //navigation header bar
+   static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.getParam('Name', 'Doctor Detail'),
+    };
   };
   
 
+  onShare = async () => {
+    try {
+      const result = await Share.share({
+        title:
+        'Doctor recommendation',
+        message:
+          'Best doctor recommendation for your treatment'+ this.props.navigation.getParam("Name","Doctor Recommendation")
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   //top header for doctor detail
   header(){
+   
     return(
       <View>
         <View style={{flexDirection:'row',}}>
           <View style={{width:150,borderWidth:1,borderColor:'gray'}}>
-            <Image  source={require('../assets/doctoricon.png')} style={{width:'100%',height:150,resizeMode:'cover'}} />
+            <Image  source={{uri:this.props.navigation.getParam("ImageUrl")}} style={{width:'100%',height:150,resizeMode:'cover'}} />
           </View>
           <View style={{paddingLeft:20}}>
-            <Text style={{fontSize:18,fontWeight:'bold',color:'blue'}}>Doctor Name</Text>
+            <Text style={{fontSize:18,fontWeight:'bold',color:'blue'}}>{this.props.navigation.getParam('Name')}</Text>
             <View style={{flexDirection:'row',paddingTop:5}}>
-              <Text>Male</Text>
+              <Text>{this.props.navigation.getParam('Sex')}</Text>
               <Text style={{paddingLeft:3,paddingRight:3}}>|</Text>
-              <Text>Age:30</Text>
+              <Text>Age:{this.props.navigation.getParam('Age')}</Text>
             </View>
            
-            <Text style={{paddingTop:5}}>1 Review</Text>
+            <Text style={{paddingTop:5}}>{this.props.navigation.getParam('Review')} Review</Text>
             
             <View style={styles.startPosotion}>
-              <Text style={styles.starIcon}>{star}</Text>
-              <Text style={styles.starIcon}>{star}</Text>
-              <Text style={styles.starIcon}>{star}</Text>
-              <Text style={styles.starIcon}>{star}</Text>
-              <Text style={styles.starIcon}>{star}</Text>
+                      {Math.round(this.props.navigation.getParam('Star')/this.props.navigation.getParam('Review')) == 5?
+                         <View style={{flexDirection:"row"}}>
+                          <Text style={styles.starIcon}>{star}</Text>
+                          <Text style={styles.starIcon}>{star}</Text>
+                          <Text style={styles.starIcon}>{star}</Text>
+                          <Text style={styles.starIcon}>{star}</Text>
+                          <Text style={styles.starIcon}>{star}</Text>
+                          </View>
+                        :null }
+
+
+                        {Math.round(this.props.navigation.getParam('Star')/this.props.navigation.getParam('Review')) == 4?
+                          <View style={{flexDirection:"row"}}>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                          </View>
+                        :null }
+
+                        {Math.round(this.props.navigation.getParam('Star')/this.props.navigation.getParam('Review')) == 3?
+                          <View style={{flexDirection:"row"}}>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                          </View>
+                        :null
+                       }
+
+                        {Math.round(this.props.navigation.getParam('Star')/this.props.navigation.getParam('Review')) == 2?
+                          <View style={{flexDirection:"row"}}>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                          </View>
+                        :null }
+
+                        {Math.round(this.props.navigation.getParam('Star')/this.props.navigation.getParam('Review')) == 1?
+                          <View style={{flexDirection:"row"}}>
+                            <Text style={styles.starIcon}>{star}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                            <Text style={styles.starIcon}>{unstar}</Text>
+                          </View>
+                        :null  }
+
+                        {Math.round(this.props.navigation.getParam('Star')/this.props.navigation.getParam('Review')) == 0?
+                         <View style={{flexDirection:"row"}}>
+                          <Text style={styles.starIcon}>{unstar}</Text>
+                          <Text style={styles.starIcon}>{unstar}</Text>
+                          <Text style={styles.starIcon}>{unstar}</Text>
+                          <Text style={styles.starIcon}>{unstar}</Text>
+                          <Text style={styles.starIcon}>{unstar}</Text>
+                          </View>
+                          :null }
+                         
             </View>
             
             
@@ -58,10 +148,14 @@ export default class DoctorDetail extends Component {
         <View style={{flexDirection:'row'}}>
           <Text style={{fontSize:16,fontWeight:'bold',color:'#000'}}>Specialist</Text>
 
-          <Text style={{fontSize:16,fontWeight:'bold',fontWeight:'bold',paddingLeft:5,color:'blue'}}>Eye</Text>
+          <Text style={{fontSize:16,fontWeight:'bold',fontWeight:'bold',paddingLeft:5,color:'blue'}}>{this.props.navigation.getParam('Speciality')}</Text>
         </View>
        
-        <Text style={{paddingTop:5,paddingLeft:5}}>Dr. Vincent Miccio Jr, MD is a rehabilitation specialist in Brooklyn, NY and has been practicing for 2 years.</Text>
+        <Text style={{paddingTop:5,paddingLeft:5}}>{this.props.navigation.getParam('Education')}</Text>
+        <View style={{paddingTop:10}}>
+          <Text style={{fontSize:16,fontWeight:'bold',color:'#000'}}>Hospital</Text>
+          <Text style={{paddingTop:5,paddingLeft:5}}>{this.props.navigation.getParam('Hospital')} </Text>
+         </View>
       </View>
     )
   }
@@ -69,8 +163,25 @@ export default class DoctorDetail extends Component {
   biography(){
     return(
        <View style={{paddingTop:10}}>
+         
          <Text style={{fontSize:16,fontWeight:'bold',color:'#000'}}>Biography</Text>
-         <Text style={{paddingTop:5,paddingLeft:5}}>Dr. John Chuback is a Board Certified Cardiovascular Surgeon serving the Paramus area for more than 15 years. Dr. Chuback is experienced in Vascular Surgery, Varicose Vein Treatment and Laser Sclerotherapy. </Text>
+         <Text style={{paddingTop:5,paddingLeft:5}}>{this.props.navigation.getParam('Biography')} </Text>
+         <View>
+            <Text style={{fontSize:16,fontWeight:'bold',color:'#000'}}>Contact </Text>
+            <View style={{flexDirection:'row'}}>
+                <Text style={{paddingTop:5,paddingLeft:5}}>{email}</Text>
+                <Text style={{paddingTop:5,paddingLeft:5}}>{this.props.navigation.getParam('Email')} </Text>
+            </View>
+           
+           <View style={{paddingTop:20,width:'30%'}}>
+             <TouchableOpacity  onPress={this.onShare}>
+               <View style={{backgroundColor:'blue',padding:10}}>
+                  <Text style={{color:'#fff',fontSize:16,textAlign:'center'}}>Share</Text>
+               </View>
+               
+             </TouchableOpacity>
+           </View>
+         </View>
        </View>
     )
   }

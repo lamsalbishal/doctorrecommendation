@@ -17,6 +17,7 @@ import FeedBack from './src/FeedBack/feedback';
 import Login from './src/Login/login_form';
 import SignUp from './src/Signup/signup';
 import SearchDetail from './src/Search/search_detail';
+import Appointment from './src/Appointment/appointment';
 
 
 const MainNavigator = createStackNavigator(
@@ -50,6 +51,9 @@ const MainNavigator = createStackNavigator(
 
     Register:{
       screen:SignUp
+    },
+    Appointment:{
+      screen:Appointment
     }
    
 

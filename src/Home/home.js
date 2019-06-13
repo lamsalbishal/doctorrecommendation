@@ -180,8 +180,8 @@ export default class Home extends Component {
                     </View>
                     <View>
                         <Image
-                          style={{width: 50, height: 60}}
-                          source={require('../assets/doctoricon.png')}
+                          style={{width: 70, height: 70}}
+                          source={{uri:item.Doctor_Image_URL}}
                           />
                     </View>   
                 </View>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, StatusBar,View,TextInput,Image,FlatList,Modal,TouchableOpacity,ToastAndroid} from 'react-native';
+import { StyleSheet, Text, StatusBar,View,TextInput,Image,FlatList,Modal,TouchableOpacity,ToastAndroid,ActivityIndicator} from 'react-native';
 import { Toolbar } from 'react-native-material-ui';
 import { CheckBox } from 'react-native-elements'
 
@@ -31,7 +31,8 @@ export default class DoctorList extends Component {
             dataSet:'',
             doctorDetailList:'',
             doctorDetailListView:'',
-            errorText:false
+            errorText:false,
+            showIndicator:false
             
            
         }
@@ -189,6 +190,7 @@ export default class DoctorList extends Component {
 
     //fetch the api 
     makeRemoteRequest = () => {
+        
         fetch("http://manojphuyal259-001-site1.gtempurl.com/api/GetDoctor")
             .then((response) => response.json())
             .then((responseJson) => {
@@ -214,6 +216,10 @@ export default class DoctorList extends Component {
 
     feedbackSubmit(){
       
+        this.setState({
+            showIndicator:true
+        })
+
         console.log("countdata",this.state.count)
         if(this.state.feedbackText.length > 0){
             let collection = {}
@@ -289,6 +295,7 @@ export default class DoctorList extends Component {
           }).then(res => res.json())
           .then(
               response => {
+                
                
                 ToastAndroid.show('Success full', ToastAndroid.SHORT);
                 
@@ -300,9 +307,13 @@ export default class DoctorList extends Component {
                 
               });
 
+             
         this.setState({
+            showIndicator:false,
             modalVisible: !this.state.modalVisible, 
-        })      
+        
+        })     
+        this.props.navigation.navigate("Home"); 
     }
    
     //search toolbar for doctor search
@@ -349,7 +360,7 @@ export default class DoctorList extends Component {
                     <View style={{flexDirection:'row'}}>
                        <Text>{item.Doctor_Specialty}</Text>
                        <Text> | </Text>
-                       <Text>{item.Doctor_Experience} yrs</Text>
+                       <Text>{item.Doctor_Experience} </Text>
                     </View>
                     <View style={{flexDirection:'row'}}>
                        <Text>{item.Doctor_Sex}</Text>
@@ -445,12 +456,17 @@ export default class DoctorList extends Component {
 
 
                             <View style={{paddingTop:10}}>
-
+                                {this.state.showIndicator?
+                                <ActivityIndicator></ActivityIndicator>
+                                :
+                                
+                                
                                 <TouchableOpacity onPress={() => {this.feedbackSubmit()}}>
                                 
                                     <Text style={{color:'#FFF',fontSize:20,backgroundColor:'red',borderRadius:10,padding:10,width:'50%',textAlign:'center'}}>Sumbit</Text>
                         
                                 </TouchableOpacity>
+                                }
 
                             </View>
 

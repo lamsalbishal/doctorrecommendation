@@ -22,9 +22,12 @@ export default class LoginForm extends Component{
         password : '',
         passwordValidate:true,
         showMe:false, 
+        registerItem:''
     }
 
   }
+
+ 
   
   //validation the form
   loginValidate(text,type){
@@ -64,8 +67,16 @@ export default class LoginForm extends Component{
   //submitting the form
   login()
   {
+    
+    this.setState({
+      showMe:true
+    })
     if(this.state.username == ''  &&  this.state.password == '' ){
         Alert.alert('Soory','Please field the form !');
+        this.setState({
+          showMe:false
+        })
+
     } else{
         this._login_form();
         
@@ -73,42 +84,87 @@ export default class LoginForm extends Component{
   }
   
   //login part
-  _login_form = () => {
+  //  = () => {
    
-    this.setState({
-      showMe:true,
-    })
-    let collection = {}
-    collection.username = this.state.username,
-    collection.password = this.state.password
-                 
-    fetch('https://dashani.dr.com', {
-      method: 'POST', // or 'PUT'
-      body: JSON.stringify(collection), // data can be `string` or {object}!
-      headers:{
-        'Accept': 'appliaction/json',
-        'Content-Type': 'application/json'
-      }
-    }).then(res => res.json())
-    .then(
-        response => {
-          this.setState ({
-            showMe:false,
-          })
-         
-          AsyncStorage.setItem('userResult', JSON.stringify(response.success));
-          ToastAndroid.show(response.message.toString(), ToastAndroid.SHORT);
-          
-        }
-        // showMe=>false
-        ).catch(error => {
-          this.setState({
-            showMe:false
-          })
-         console.log('Login error',error)
-          
-        });
+  //   this.setState({
+  //     showMe:false,
+  //   })
+  //   let collection = {}
+  //   collection.username = this.state.username,
+  //   collection.password = this.state.password
+
+  //   console.log("loginItem",this.state.registerItem);
+
+  //    this.state.registerItem.map((item) => {
+  //      {item.username == this.state.username ? console.log("username correct"):null}
+  //    })            
+    
        
+  // }
+
+  _login_form = async () => {
+    try {
+      
+      const value = await AsyncStorage.getItem('register');
+      console.log("value",value);
+      const x = [];
+      x.push(JSON.parse(value))
+      if(value != null)
+      {
+        x.map((item) =>
+        {
+          {item.username == this.state.username?
+            item.password == this.state.password?
+            this.successLogin()
+            
+            :
+            Alert.alert(
+              'Soory',
+              'Password not match',
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+              ],
+              {cancelable: false},
+            ):
+            Alert.alert(
+              'Soory Title',
+              'Username not match',
+              [
+               
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+              ],
+              {cancelable: false},
+            );
+          }
+        })
+      
+      }
+
+
+    } catch (error) {
+      // Error retrieving data
+    }
+   this.setState({
+     showMe:false
+   })
+  };
+
+  successLogin = () => {
+    Alert.alert("message","i am at login");
+    AsyncStorage.setItem('signin',"true");
+    this.props.navigation.navigate('Home') 
+
+   
   }
    
   
@@ -117,14 +173,7 @@ export default class LoginForm extends Component{
     
     return (
         <View style={styles.container}>
-            {this.state.showMe?
-              <View>
-                  <ActivityIndicator size="large" />
-              </View>:
-              <View>
-                <Text></Text>
-              </View>
-            }
+           
 
             {/* username input field */}
             <TextInput 
@@ -148,6 +197,12 @@ export default class LoginForm extends Component{
                 ref={(input) => { this.firstTextInput = input; }}/>
           
             {/* for the login button */}
+            {this.state.showMe?
+              <View>
+                  <ActivityIndicator size="large" />
+              </View>:
+              
+            
             <TouchableOpacity
                 style={styles.button}
                 navigation={this.props.navigation} 
@@ -157,7 +212,7 @@ export default class LoginForm extends Component{
                     {this.props.type}
                 </Text>
             </TouchableOpacity>
-          
+            }
         </View>
     );
   }

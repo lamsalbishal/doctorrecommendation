@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, StatusBar,View,TextInput,TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, StatusBar,View,TextInput,TouchableOpacity,Share} from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -23,8 +23,10 @@ export default class Feedback extends Component {
     onShare = async () => {
         try {
           const result = await Share.share({
+            title:
+            'Doctor recommendation',
             message:
-              'React Native | A framework for building native apps using React',
+              'Best Doctor For your Treatment : Download Doctor Recommendation'
           });
     
           if (result.action === Share.sharedAction) {
@@ -37,9 +39,9 @@ export default class Feedback extends Component {
             // dismissed
           }
         } catch (error) {
-         console.log("error",error.message);
+          alert(error.message);
         }
-    };
+      };
     
  
 
